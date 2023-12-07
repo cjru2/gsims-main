@@ -78,7 +78,7 @@ class Order {
 
 			$status2 = "Disable";
 	 
-			$stmt2->bind_param("si", $status2, $this->id);
+			$stmt2->bind_param("si", $status2, $this->tableName);
 			$stmt2->execute();
 
 			$stmt = $this->conn->prepare("
@@ -117,7 +117,7 @@ class Order {
 
 			$status2 = "Enable";
 	 
-			$stmt2->bind_param("si", $status2, $this->id);
+			$stmt2->bind_param("si", $status2, $this->tableName);
 			$stmt2->execute();
 			
 			$stmt = $this->conn->prepare("
