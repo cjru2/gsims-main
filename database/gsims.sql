@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2023 at 02:17 AM
+-- Generation Time: Dec 07, 2023 at 12:10 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -44,13 +44,34 @@ INSERT INTO `restaurant_category` (`id`, `name`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `restaurant_discount`
+--
+
+CREATE TABLE `restaurant_discount` (
+  `id` int(11) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `type` varchar(250) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `restaurant_discount`
+--
+
+INSERT INTO `restaurant_discount` (`id`, `name`, `type`, `amount`, `status`) VALUES
+(1, 'Discount 1', '', 0.00, 'Enable');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `restaurant_items`
 --
 
 CREATE TABLE `restaurant_items` (
   `id` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
+  `price` decimal(12,2) NOT NULL,
   `category_id` int(11) NOT NULL,
   `status` enum('Enable','Disable') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -71,7 +92,7 @@ INSERT INTO `restaurant_items` (`id`, `name`, `price`, `category_id`, `status`) 
 
 CREATE TABLE `restaurant_order` (
   `id` int(11) NOT NULL,
-  `table_id` varchar(250) NOT NULL,
+  `table_id` varchar(250) DEFAULT NULL,
   `gross_amount` decimal(12,2) NOT NULL,
   `tax_amount` decimal(12,2) NOT NULL,
   `net_amount` decimal(12,2) NOT NULL,
@@ -85,7 +106,14 @@ CREATE TABLE `restaurant_order` (
 --
 
 INSERT INTO `restaurant_order` (`id`, `table_id`, `gross_amount`, `tax_amount`, `net_amount`, `created`, `created_by`, `status`) VALUES
-(1000, '1', 9.00, 0.00, 0.00, '2023-12-07 09:08:16', 'admin', 'Completed');
+(1000, '4', 9.00, 0.00, 0.00, '2023-12-07 19:03:36', 'admin', 'Completed'),
+(1001, '1', 4.00, 0.00, 0.00, '2023-12-07 18:21:51', 'admin', 'In Process'),
+(1002, '1', 600.00, 0.00, 0.00, '2023-12-07 18:26:35', 'admin', 'In Process'),
+(1003, '2', 60.00, 0.00, 0.00, '2023-12-07 18:27:51', 'admin', ''),
+(1004, '1', 50.00, 0.00, 0.00, '2023-12-07 18:30:31', 'admin', 'In Process'),
+(1005, '3', 50.00, 0.00, 0.00, '2023-12-07 18:31:51', 'admin', 'In Process'),
+(1006, '4', 50.00, 0.00, 0.00, '2023-12-07 19:04:35', 'admin', 'In Process'),
+(1007, '4', 50.00, 0.00, 0.00, '2023-12-07 19:08:01', 'admin', 'Completed');
 
 -- --------------------------------------------------------
 
@@ -108,8 +136,15 @@ CREATE TABLE `restaurant_order_item` (
 --
 
 INSERT INTO `restaurant_order_item` (`id`, `order_id`, `category_id`, `item_id`, `quantity`, `rate`, `amount`) VALUES
-(10, 1000, 6, 1, 1, 5.00, 5.00),
-(11, 1000, 6, 6, 1, 4.00, 4.00);
+(12, 1001, 6, 1, 1, 4.00, 4.00),
+(13, 1002, 6, 1, 1, 600.00, 600.00),
+(14, 1003, 6, 1, 1, 60.00, 60.00),
+(15, 1004, 6, 1, 1, 50.00, 50.00),
+(16, 1005, 6, 1, 1, 50.00, 50.00),
+(17, 1000, 6, 1, 1, 5.00, 5.00),
+(18, 1000, 6, 6, 1, 4.00, 4.00),
+(19, 1006, 6, 1, 1, 50.00, 50.00),
+(21, 1007, 6, 6, 1, 50.00, 50.00);
 
 -- --------------------------------------------------------
 
@@ -194,11 +229,12 @@ CREATE TABLE `restaurant_table` (
 --
 
 INSERT INTO `restaurant_table` (`id`, `name`, `capacity`, `status`) VALUES
-(1, 'Table 1', 4, 'Enable'),
-(2, 'Table 2', 2, 'Enable'),
-(3, 'Table 3', 4, 'Enable'),
+(1, 'Table 1', 2, ''),
+(2, 'Table 2', 2, ''),
+(3, 'Table 3', 4, 'Disable'),
 (4, 'Table 4', 2, 'Enable'),
-(5, 'Table 5', 4, 'Enable');
+(5, 'Table 5', 4, 'Enable'),
+(7, 'Table 6', 4, 'Enable');
 
 -- --------------------------------------------------------
 
@@ -220,6 +256,25 @@ CREATE TABLE `restaurant_tax` (
 INSERT INTO `restaurant_tax` (`id`, `tax_name`, `percentage`, `status`) VALUES
 (1, 'SGST', 5.50, 'Enable'),
 (2, 'CGST', 7.50, 'Enable');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaurant_uom`
+--
+
+CREATE TABLE `restaurant_uom` (
+  `id` int(11) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `status` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `restaurant_uom`
+--
+
+INSERT INTO `restaurant_uom` (`id`, `name`, `status`) VALUES
+(2, 'Plate', 'Enable');
 
 -- --------------------------------------------------------
 
@@ -255,6 +310,12 @@ INSERT INTO `restaurant_user` (`id`, `first_name`, `last_name`, `gender`, `email
 -- Indexes for table `restaurant_category`
 --
 ALTER TABLE `restaurant_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `restaurant_discount`
+--
+ALTER TABLE `restaurant_discount`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -294,6 +355,12 @@ ALTER TABLE `restaurant_tax`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `restaurant_uom`
+--
+ALTER TABLE `restaurant_uom`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `restaurant_user`
 --
 ALTER TABLE `restaurant_user`
@@ -310,6 +377,12 @@ ALTER TABLE `restaurant_category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `restaurant_discount`
+--
+ALTER TABLE `restaurant_discount`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `restaurant_items`
 --
 ALTER TABLE `restaurant_items`
@@ -319,13 +392,13 @@ ALTER TABLE `restaurant_items`
 -- AUTO_INCREMENT for table `restaurant_order`
 --
 ALTER TABLE `restaurant_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1008;
 
 --
 -- AUTO_INCREMENT for table `restaurant_order_item`
 --
 ALTER TABLE `restaurant_order_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `restaurant_promo`
@@ -337,13 +410,19 @@ ALTER TABLE `restaurant_promo`
 -- AUTO_INCREMENT for table `restaurant_table`
 --
 ALTER TABLE `restaurant_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `restaurant_tax`
 --
 ALTER TABLE `restaurant_tax`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `restaurant_uom`
+--
+ALTER TABLE `restaurant_uom`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `restaurant_user`
